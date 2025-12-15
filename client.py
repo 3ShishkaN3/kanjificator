@@ -1,6 +1,5 @@
 import tkinter as tk
 import requests
-import time
 from threading import Thread
 
 API_URL = "http://localhost:5200/recognize"
@@ -26,8 +25,9 @@ class KanjiPad:
 
         self.results_list = tk.Listbox(self.right_panel, font=("Arial", 18), height=10, width=15)
         self.results_list.pack(pady=5)
+        
+        self.results_list.bind('<<ListboxSelect>>', self.on_select_candidate)
 
-        # Structure of data: [ [(x,y), (x,y)...], [(x,y)...] ]
         self.strokes = [] 
         self.current_stroke = []
 
@@ -42,7 +42,7 @@ class KanjiPad:
         if self.current_stroke:
             x1, y1 = self.current_stroke[-1]
             x2, y2 = event.x, event.y
-            self.canvas.create_line(x1, y1, x2, y2, width=LINE_WIDTH, capstyle=tk.ROUND, smooth=True)
+            self.canvas.create_line(x1, y1, x2, y2, width=LINE_WIDTH, capstyle=tk.ROUND, smooth=True, tags="user_ink")
             self.current_stroke.append((x2, y2))
 
     def end_stroke(self, event):
@@ -55,6 +55,30 @@ class KanjiPad:
         self.canvas.delete("all")
         self.strokes = []
         self.results_list.delete(0, tk.END)
+
+    def on_select_candidate(self, event):
+        selection = self.results_list.curselection()
+        if not selection:
+            return
+            
+        text = self.results_list.get(selection[0])
+        char = text.split(" ")[0]
+        
+        self.show_phantom(char)
+
+    def show_phantom(self, char):
+        self.canvas.delete("phantom")
+        
+        self.canvas.create_text(
+            CANVAS_SIZE / 2, 
+            CANVAS_SIZE / 2, 
+            text=char, 
+            font=("Arial", 220), 
+            fill="#E0E0E0", 
+            tags="phantom"
+        )
+        
+        self.canvas.tag_lower("phantom")
 
     def send_request(self):
         payload = {
@@ -75,6 +99,9 @@ class KanjiPad:
 
     def update_results(self, candidates):
         def _update():
+            current_selection = self.results_list.curselection()
+            selected_idx = current_selection[0] if current_selection else None
+            
             self.results_list.delete(0, tk.END)
             for item in candidates:
                 display_text = f"{item['value']} ({item['score']:.3f})"
