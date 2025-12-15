@@ -1,0 +1,22 @@
+Zinnia-Docker-API
+Copyright 2025-2026 Reznik Danil Maksimovich (aka "Shishka")
+
+This product includes software developed by Reznik D. M. "Shishka".
+Repositories: 
+1. https://github.com/3ShishkaN3/kanjificator
+2. https://gitverse.ru/shish/kanjificator
+
+---------------------------------------------------------
+CREDITS AND THIRD PARTY COMPONENTS:
+
+1. Zinnia (Handwriting Recognition System)
+   Copyright (c) 2005-2007, Taku Kudo. All rights reserved.
+   Used under BSD 3-Clause License.
+
+2. Tegaki Zinnia Japanese (Recognition Model)
+   Copyright (c) 2009-2010 The Tegaki Project Contributors.
+   Authors: Mathieu Blondel, Ian Johnson.
+   
+   The model file included in this distribution is licensed under the 
+   GNU General Public License (GPL). 
+   See https://www.gnu.org/licenses/gpl-3.0.html for details.

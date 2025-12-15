@@ -3,14 +3,14 @@ import requests
 import time
 from threading import Thread
 
-API_URL = "http://localhost:5000/recognize"
+API_URL = "http://localhost:5200/recognize"
 CANVAS_SIZE = 300
 LINE_WIDTH = 4
 
 class KanjiPad:
     def __init__(self, root):
         self.root = root
-        self.root.title("Zinnia Kanji Pad")
+        self.root.title("Zinnia Kanjificator")
 
         self.main_frame = tk.Frame(root)
         self.main_frame.pack(padx=10, pady=10)
@@ -24,10 +24,10 @@ class KanjiPad:
         self.clear_btn = tk.Button(self.right_panel, text="Clear", command=self.clear_canvas, height=2, width=10)
         self.clear_btn.pack(pady=5)
 
-        self.results_list = tk.Listbox(self.right_panel, font=("Arial", 24), height=8, width=5)
+        self.results_list = tk.Listbox(self.right_panel, font=("Arial", 18), height=10, width=15)
         self.results_list.pack(pady=5)
 
-        # Структура: [ [(x,y), (x,y)...], [(x,y)...] ]
+        # Structure of data: [ [(x,y), (x,y)...], [(x,y)...] ]
         self.strokes = [] 
         self.current_stroke = []
 
@@ -77,7 +77,8 @@ class KanjiPad:
         def _update():
             self.results_list.delete(0, tk.END)
             for item in candidates:
-                self.results_list.insert(tk.END, item['value'])
+                display_text = f"{item['value']} ({item['score']:.3f})"
+                self.results_list.insert(tk.END, display_text)
         
         self.root.after(0, _update)
 

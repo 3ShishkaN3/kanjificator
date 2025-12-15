@@ -21,7 +21,7 @@ except Exception as e:
 def recognize():
     data = request.json
     
-    # структура: 
+    # structure of data: 
     # { 
     #   "width": 300, 
     #   "height": 300, 
@@ -50,11 +50,11 @@ def recognize():
     if result:
         for i in range(result.size()):
             candidates.append({
-                "value": result.value(i), # Сам иероглиф
-                "score": result.score(i)  # Уверенность
+                "value": result.value(i), # kanji character
+                "score": result.score(i)  # confidence score
             })
     
     return jsonify(candidates)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5200)
